@@ -41,28 +41,38 @@ price_block = soup.find('div', attrs={'class': 'main-price-block'})
 characteristics_block = soup.find('div', attrs={'class': 'br-pr-chr'})
 
 try:
-    product['title'] = soup.find('h1', attrs={'class': 'main-title'}).text.strip()
+    product['title'] = soup.find('h1',
+                                 attrs={'class': 'main-title'}).text.strip()
 except AttributeError:
     product['title'] = None
 
 try:
-    product['color'] = characteristics_block.find('span', string=['Колір', 'Цвет']).find_next_sibling('span').text.strip()
+    product['color'] = characteristics_block.find('span', string=['Колір',
+                                                                  'Цвет']).find_next_sibling(
+        'span').text.strip()
 except AttributeError:
     product['color'] = None
 
 try:
-    product['memory'] = characteristics_block.find('span', string=["Вбудована пам'ять", 'Встроенная память']).find_next_sibling('span').text.strip()
+    product['memory'] = characteristics_block.find('span',
+                                                   string=["Вбудована пам'ять",
+                                                           'Встроенная память']).find_next_sibling(
+        'span').text.strip()
 except AttributeError:
     product['memory'] = None
 
 try:
-    product['manufacturer'] = characteristics_block.find('span', string=['Виробник', 'Производитель']).find_next_sibling('span').text.strip()
+    product['manufacturer'] = characteristics_block.find('span',
+                                                         string=['Виробник',
+                                                                 'Производитель']).find_next_sibling(
+        'span').text.strip()
 except AttributeError:
     product['manufacturer'] = None
 
 try:
     old_price = price_block.find('div', attrs={'class': 'br-pr-op'})
-    current_price = price_block.find('div', attrs={'class': 'br-pr-np'}).find('span').text.strip()
+    current_price = price_block.find('div', attrs={'class': 'br-pr-np'}).find(
+        'span').text.strip()
     if old_price:
         product['price'] = old_price.find('span').text.strip()
         product['sale_price'] = current_price
@@ -77,34 +87,43 @@ try:
     gallery = soup.find('div', attrs={'class': 'br-image-links'})
     product['images'] = [
         link.find('img').get('src')
-        for link in gallery.find_all('a', attrs={'class': 'product-modal-button'})
+        for link in
+        gallery.find_all('a', attrs={'class': 'product-modal-button'})
     ]
 except AttributeError:
     product['images'] = None
 
 try:
-    product['product_code'] = soup.find('span', attrs={'class': 'br-pr-code-val'}).text.strip()
+    product['product_code'] = soup.find('span', attrs={
+        'class': 'br-pr-code-val'}).text.strip()
 except AttributeError:
     product['product_code'] = None
 
 try:
-    product['reviews_count'] = int(soup.find('a', attrs={'class': 'reviews-count'}).find('span').text.strip())
+    product['reviews_count'] = int(
+        soup.find('a', attrs={'class': 'reviews-count'}).find(
+            'span').text.strip())
 except (AttributeError, ValueError):
     product['reviews_count'] = None
 
 try:
-    product['screen_diagonal'] = characteristics_block.find('span', string=['Діагональ екрану', 'Диагональ экрана']).find_next_sibling('span').text.strip()
+    product['screen_diagonal'] = characteristics_block.find('span', string=[
+        'Діагональ екрану', 'Диагональ экрана']).find_next_sibling(
+        'span').text.strip()
 except AttributeError:
     product['screen_diagonal'] = None
 
 try:
-    product['screen_resolution'] = characteristics_block.find('span', string=['Роздільна здатність екрану', 'Разрешение экрана']).find_next_sibling('span').text.strip()
+    product['screen_resolution'] = characteristics_block.find('span', string=[
+        'Роздільна здатність екрану', 'Разрешение экрана']).find_next_sibling(
+        'span').text.strip()
 except AttributeError:
     product['screen_resolution'] = None
 
 try:
     characteristics = {}
-    for item in characteristics_block.find_all('div', attrs={'class': 'br-pr-chr-item'}):
+    for item in characteristics_block.find_all('div', attrs={
+        'class': 'br-pr-chr-item'}):
         for row in item.find('div').find_all('div', recursive=False):
             label, value = row.find_all('span', recursive=False)
             characteristics[label.text.strip()] = ' '.join(value.text.split())
