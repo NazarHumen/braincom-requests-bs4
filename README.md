@@ -1,4 +1,4 @@
-# braincom_project
+# Task 1 - Requests / BS4
 
 Parser for a product page on brain.com.ua (`requests` + `BeautifulSoup`), results are saved to PostgreSQL via Django ORM.
 
